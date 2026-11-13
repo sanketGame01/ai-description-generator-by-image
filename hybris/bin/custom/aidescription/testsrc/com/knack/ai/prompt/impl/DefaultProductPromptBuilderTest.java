@@ -161,6 +161,27 @@ public class DefaultProductPromptBuilderTest
 	}
 
 	@Test
+	public void shouldWrapFactsUnderVerifiedFactsHeading()
+	{
+		when(product.getManufacturerAID()).thenReturn("MR-14EX");
+		when(product.getDescription(Locale.ENGLISH)).thenReturn("Holds 3 kg");
+		withFeatures(feature("Weight", new BigDecimal("320.0"), "g"));
+
+		final String prompt = builder.buildPrompt(product);
+
+		assertThat(prompt).contains("Verified facts:\nProduct: Tripod X\nBrand: Sony\nPart number: MR-14EX\n"
+				+ "Category: Tripods\nSpecifications:");
+	}
+
+	@Test
+	public void shouldIncludeConflictResolutionInstruction()
+	{
+		assertThat(builder.buildPrompt(product))
+				.contains("If a value in Specifications conflicts with the Existing description, use the "
+						+ "Existing description value.");
+	}
+
+	@Test
 	public void shouldCountSpecificationsAndDescriptionAsThreeFacts()
 	{
 		assertThat(builder.countFacts(product)).isZero();
