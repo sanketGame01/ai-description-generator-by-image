@@ -53,8 +53,11 @@ public class DefaultProductPromptBuilder implements ProductPromptBuilder
 				+ "or premium unless that exact word appears in the facts.\n");
 		prompt.append("Do not say who the product is for or how to use it unless the facts state it.\n");
 		prompt.append("If you are unsure what a specification means, state it plainly without interpreting it.\n");
-		prompt.append("Return plain text in flowing sentences, no HTML, no headings, no bullet points.\n\n");
+		prompt.append("Return plain text in flowing sentences, no HTML, no headings, no bullet points.\n");
+		prompt.append("If a value in Specifications conflicts with the Existing description, use the Existing "
+				+ "description value.\n\n");
 
+		prompt.append("Verified facts:\n");
 		prompt.append("Product: ").append(product.getName()).append('\n');
 		prompt.append("Brand: ").append(isBlank(brand) ? "n/a" : brand).append('\n');
 		if (!isBlank(partNumber))
